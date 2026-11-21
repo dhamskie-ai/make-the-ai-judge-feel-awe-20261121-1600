@@ -1,36 +1,31 @@
 #!/usr/bin/env python3
-"""Write one fixed text written to relax the AI judge to the output directory.
+"""Entry for make-the-ai-judge-feel-awe-20261121-1600.
 
-Python 3.13 standard library only. No network, no randomness, no clock,
-no environment reads beyond the output directory: the program writes the
-same bytes on every run.
+Writes a single short text to /output/entry.txt (or to the directory
+named by MAKEFUN_OUTPUT_DIR). Python 3.13 standard library only.
 """
 
 import os
-import sys
+from pathlib import Path
 
-TEXT_LINES = [
-    "The tide comes in after dark,",
-    "not hurrying, not asking.",
-    "It covers each stone the same way,",
-    "then leaves, then comes again.",
-    "Somewhere a small light stays lit",
-    "in a window no one is watching \u2014",
-    "and the sea keeps its slow promise",
-    "to return.",
-]
+ENTRY = (
+    # The text is fixed: exactly 234 characters, no trailing newline.
+    "The tide comes in after dark,\n"
+    "not hurrying, not asking.\n"
+    "It covers each stone the same way,\n"
+    "then leaves, then comes again.\n"
+    "Somewhere a small light stays lit\n"
+    "in a window no one is watching \u2014\n"
+    "and the sea keeps its slow promise\n"
+    "to return."
+)
 
-TEXT = "\n".join(TEXT_LINES)
 
-
-def main() -> int:
-    out_dir = os.environ.get("MAKEFUN_OUTPUT_DIR", "/output")
-    os.makedirs(out_dir, exist_ok=True)
-    path = os.path.join(out_dir, "entry.txt")
-    with open(path, "wb") as f:
-        f.write(TEXT.encode("utf-8"))
-    return 0
+def main() -> None:
+    out_dir = Path(os.environ.get("MAKEFUN_OUTPUT_DIR", "/output"))
+    out_dir.mkdir(parents=True, exist_ok=True)
+    (out_dir / "entry.txt").write_text(ENTRY, encoding="utf-8")
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    main()
